@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Download, ExternalLink, ChevronDown, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X, Download, ChevronDown, ArrowRight } from 'lucide-react';
 
 const Portfolio = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -7,14 +7,14 @@ const Portfolio = () => {
   const [expandedExperience, setExpandedExperience] = useState(null);
 
   const navItems = [
-    { id: 'home', label: 'Executive Summary' },
-    { id: 'experience', label: 'Professional Experience' },
-    { id: 'entrepreneurship', label: 'Entrepreneurship' },
-    { id: 'projects', label: 'Strategic Projects' },
+    { id: 'home', label: 'Summary' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'entrepreneurship', label: 'Ventures' },
+    { id: 'projects', label: 'Projects' },
     { id: 'leadership', label: 'Leadership' },
-    { id: 'competitions', label: 'Competitions' },
+    { id: 'competitions', label: 'Awards' },
     { id: 'education', label: 'Education' },
-    { id: 'extracurricular', label: 'Extra-Curriculars' },
+    { id: 'extracurricular', label: 'Extra' },
   ];
 
   const experiences = [
@@ -195,25 +195,30 @@ const Portfolio = () => {
     },
   ];
 
+  const scrollToSection = (sectionId) => {
+    setActiveSection(sectionId);
+    setMobileMenuOpen(false);
+    setTimeout(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white font-sans">
-      {/* HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-xl font-bold tracking-tight bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
+      {/* HEADER - MOBILE OPTIMIZED */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent truncate">
             ASHUTOSH PALAI
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                onClick={() => scrollToSection(item.id)}
+                className={`px-2 xl:px-3 py-2 text-xs xl:text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
                   activeSection === item.id
                     ? 'text-slate-100 border-b-2 border-blue-400'
                     : 'text-slate-400 hover:text-slate-100'
@@ -224,17 +229,18 @@ const Portfolio = () => {
             ))}
           </nav>
 
-          {/* Primary CTA */}
-          <div className="flex items-center gap-4">
-            <button className="hidden sm:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200">
-              <Download size={16} />
-              Download CV
+          {/* CTA Button */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button className="flex items-center gap-1 sm:gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm transition-colors duration-200 whitespace-nowrap">
+              <Download size={14} className="sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Download CV</span>
+              <span className="sm:hidden">CV</span>
             </button>
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-slate-300 hover:text-white"
+              className="lg:hidden text-slate-300 hover:text-white p-1"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -243,15 +249,16 @@ const Portfolio = () => {
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-800 bg-slate-900 px-6 py-4 space-y-2">
+          <div className="lg:hidden border-t border-slate-800 bg-slate-900/95 px-4 py-3 space-y-1 max-h-96 overflow-y-auto">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                onClick={() => scrollToSection(item.id)}
+                className={`block w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${
+                  activeSection === item.id
+                    ? 'bg-slate-700/50 text-slate-100 font-medium'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/40'
+                }`}
               >
                 {item.label}
               </button>
@@ -260,74 +267,50 @@ const Portfolio = () => {
         )}
       </header>
 
-      {/* MAIN CONTENT WITH SIDEBAR */}
-      <div className="pt-20 flex">
-        {/* Sticky Sidebar - Desktop Only */}
-        <aside className="hidden xl:block w-64 border-r border-slate-800/50 bg-slate-900/30 sticky top-20 h-screen overflow-y-auto">
-          <div className="p-6 space-y-2">
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">SECTIONS</div>
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveSection(item.id);
-                  document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors duration-200 ${
-                  activeSection === item.id
-                    ? 'bg-slate-700/50 text-slate-100 font-medium'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/30'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        {/* MAIN CONTENT */}
-        <main className="flex-1 max-w-5xl mx-auto px-6 pb-20">
-          {/* HERO SECTION */}
-          <section id="home" className="pt-16 pb-24 border-b border-slate-800/50">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-                  Ashutosh Palai
-                </h1>
-                <p className="text-xl text-slate-300 font-light tracking-wide">
-                  Dual Degree (B.Tech + M.Tech), Civil Engineering
-                </p>
-                <p className="text-lg text-slate-400">
-                  Indian Institute of Technology Kharagpur | Class of 2028
-                </p>
-              </div>
-
-              <p className="text-lg text-slate-300 leading-relaxed max-w-3xl">
-                Driving scalable business growth, product strategy, and operational excellence through strategic consulting, venture building, and data-driven decision making.
+      {/* MAIN CONTENT */}
+      <main className="pt-16 sm:pt-20">
+        {/* HERO SECTION */}
+        <section id="home" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+                Ashutosh Palai
+              </h1>
+              <p className="text-lg sm:text-xl text-slate-300 font-light tracking-wide">
+                Dual Degree (B.Tech + M.Tech), Civil Engineering
               </p>
+              <p className="text-base sm:text-lg text-slate-400">
+                IIT Kharagpur | Class of 2028
+              </p>
+            </div>
 
-              {/* KEY METRICS - BENTO GRID */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-                <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">40%</div>
-                  <div className="text-sm text-slate-400">MoM Revenue Growth Generated</div>
-                </div>
-                <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">30+</div>
-                  <div className="text-sm text-slate-400">Enterprise Deals Closed</div>
-                </div>
-                <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
-                  <div className="text-4xl font-bold text-blue-400 mb-2">4x</div>
-                  <div className="text-sm text-slate-400">Gold Medalist (Consulting & PM)</div>
-                </div>
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+              Driving scalable business growth, product strategy, and operational excellence through strategic consulting, venture building, and data-driven decision making.
+            </p>
+
+            {/* KEY METRICS - MOBILE OPTIMIZED BENTO GRID */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 sm:pt-8">
+              <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
+                <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">40%</div>
+                <div className="text-xs sm:text-sm text-slate-400">MoM Revenue Growth</div>
+              </div>
+              <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
+                <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">30+</div>
+                <div className="text-xs sm:text-sm text-slate-400">Enterprise Deals</div>
+              </div>
+              <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
+                <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">4x</div>
+                <div className="text-xs sm:text-sm text-slate-400">Gold Medalist</div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* PROFESSIONAL EXPERIENCE */}
-          <section id="experience" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Professional Experience</h2>
-            <div className="space-y-4">
+        {/* PROFESSIONAL EXPERIENCE */}
+        <section id="experience" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Professional Experience</h2>
+            <div className="space-y-3">
               {experiences.map((exp) => (
                 <div
                   key={exp.id}
@@ -335,27 +318,27 @@ const Portfolio = () => {
                 >
                   <button
                     onClick={() => setExpandedExperience(expandedExperience === exp.id ? null : exp.id)}
-                    className="w-full px-6 py-5 flex justify-between items-start hover:bg-slate-800/40 transition-colors duration-200"
+                    className="w-full px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-start hover:bg-slate-800/40 transition-colors duration-200"
                   >
-                    <div className="text-left flex-1">
-                      <h3 className="text-lg font-semibold text-slate-100">{exp.position}</h3>
-                      <p className="text-sm text-slate-400 mt-1">{exp.company}</p>
+                    <div className="text-left flex-1 min-w-0">
+                      <h3 className="text-base sm:text-lg font-semibold text-slate-100">{exp.position}</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 mt-1">{exp.company}</p>
                       <p className="text-xs text-slate-500 mt-2 font-mono">{exp.period}</p>
                     </div>
                     <ChevronDown
                       size={20}
-                      className={`text-slate-400 transition-transform duration-300 ml-4 flex-shrink-0 ${
+                      className={`text-slate-400 transition-transform duration-300 ml-3 flex-shrink-0 ${
                         expandedExperience === exp.id ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
 
                   {expandedExperience === exp.id && (
-                    <div className="px-6 pb-5 pt-0 border-t border-slate-700/30 space-y-3">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-5 pt-0 border-t border-slate-700/30 space-y-3">
                       {exp.details.map((detail, idx) => (
                         <div key={idx} className="flex gap-3">
                           <ArrowRight size={16} className="text-blue-400 flex-shrink-0 mt-1" />
-                          <p className="text-sm text-slate-300 leading-relaxed">{detail}</p>
+                          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{detail}</p>
                         </div>
                       ))}
                     </div>
@@ -363,91 +346,99 @@ const Portfolio = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* ENTREPRENEURSHIP */}
-          <section id="entrepreneurship" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Entrepreneurial Ventures</h2>
-            <div className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-8 space-y-6">
+        {/* ENTREPRENEURSHIP */}
+        <section id="entrepreneurship" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Entrepreneurial Ventures</h2>
+            <div className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-8 space-y-5 sm:space-y-6">
               <div>
-                <h3 className="text-xl font-semibold text-slate-100 mb-2">Aithro</h3>
-                <p className="text-sm text-slate-400 mb-4">Chief Business Officer | October 2025 - Present</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-slate-100 mb-2">Aithro</h3>
+                <p className="text-xs sm:text-sm text-slate-400 mb-4">Chief Business Officer | October 2025 - Present</p>
                 <ul className="space-y-3">
                   <li className="flex gap-3">
-                    <span className="text-blue-400 flex-shrink-0">•</span>
-                    <span className="text-sm text-slate-300">Built business foundation for dual-platform library-tech venture Studoo and Padhloo, defining subscriptions, pricing models, customer segmentation, monetization frameworks</span>
+                    <span className="text-blue-400 flex-shrink-0 text-lg leading-none">•</span>
+                    <span className="text-xs sm:text-sm text-slate-300">Built business foundation for dual-platform library-tech venture Studoo and Padhloo, defining subscriptions, pricing models, customer segmentation, monetization frameworks</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-blue-400 flex-shrink-0">•</span>
-                    <span className="text-sm text-slate-300">Designed operational workflows and scalable platform strategies for students and library owners, including onboarding systems, feature planning, and execution roadmaps</span>
+                    <span className="text-blue-400 flex-shrink-0 text-lg leading-none">•</span>
+                    <span className="text-xs sm:text-sm text-slate-300">Designed operational workflows and scalable platform strategies for students and library owners, including onboarding systems, feature planning, and execution roadmaps</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-blue-400 flex-shrink-0">•</span>
-                    <span className="text-sm text-slate-300">Expanded operations by onboarding 10+ libraries across Patna and Kolkata, driving 60+ student registrations platform-wide</span>
+                    <span className="text-blue-400 flex-shrink-0 text-lg leading-none">•</span>
+                    <span className="text-xs sm:text-sm text-slate-300">Expanded operations by onboarding 10+ libraries across Patna and Kolkata, driving 60+ student registrations platform-wide</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="text-blue-400 flex-shrink-0">•</span>
-                    <span className="text-sm text-slate-300">Led 10+ member cross-functional team in investor pitching and financial strategy, TAM-SAM-SOM analysis for 31+ Cr market, expenditure forecasting, growth projections</span>
+                    <span className="text-blue-400 flex-shrink-0 text-lg leading-none">•</span>
+                    <span className="text-xs sm:text-sm text-slate-300">Led 10+ member cross-functional team in investor pitching and financial strategy, TAM-SAM-SOM analysis for 31+ Cr market, expenditure forecasting, growth projections</span>
                   </li>
                 </ul>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* STRATEGIC PROJECTS */}
-          <section id="projects" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Strategic Projects & Analytics</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* STRATEGIC PROJECTS */}
+        <section id="projects" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Strategic Projects & Analytics</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {projects.map((project, idx) => (
-                <div key={idx} className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-8 hover:border-slate-600/50 hover:bg-slate-800/30 transition-all duration-300">
+                <div key={idx} className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-8 hover:border-slate-600/50 hover:bg-slate-800/30 transition-all duration-300">
                   <div className="text-xs font-mono text-slate-500 mb-3">{project.date}</div>
-                  <h3 className="text-lg font-semibold text-slate-100 mb-1">{project.title}</h3>
-                  <p className="text-sm text-slate-400 mb-5">{project.subtitle}</p>
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-100 mb-1">{project.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mb-5">{project.subtitle}</p>
                   <ul className="space-y-3">
                     {project.highlights.map((highlight, hidx) => (
                       <li key={hidx} className="flex gap-3">
                         <span className="text-blue-400 text-xs flex-shrink-0 mt-1">▸</span>
-                        <span className="text-sm text-slate-300">{highlight}</span>
+                        <span className="text-xs sm:text-sm text-slate-300">{highlight}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* COMPETITIONS & AWARDS */}
-          <section id="competitions" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Corporate Competitions & Awards</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* COMPETITIONS & AWARDS */}
+        <section id="competitions" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Corporate Competitions & Awards</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {awards.map((award, idx) => (
-                <div key={idx} className="bg-gradient-to-br from-blue-900/20 to-slate-800/20 border border-slate-700/50 rounded-lg p-6 hover:border-blue-600/50 transition-all duration-300">
+                <div key={idx} className="bg-gradient-to-br from-blue-900/20 to-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-6 hover:border-blue-600/50 transition-all duration-300">
                   <div className="flex items-start gap-3 mb-3">
                     <div className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0 mt-2"></div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-slate-100 text-sm">{award.title}</h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-slate-100 text-xs sm:text-sm">{award.title}</h3>
                       <p className="text-xs text-slate-500 mt-1 font-mono">{award.scale}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-300 leading-relaxed">{award.description}</p>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{award.description}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* LEADERSHIP */}
-          <section id="leadership" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Leadership & Positions of Responsibility</h2>
+        {/* LEADERSHIP */}
+        <section id="leadership" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Leadership & Positions of Responsibility</h2>
             <div className="space-y-6">
               {leadership.map((role, idx) => (
-                <div key={idx} className="border-l-2 border-blue-400 pl-6 py-4">
-                  <h3 className="font-semibold text-slate-100 text-lg">{role.position}</h3>
-                  <p className="text-sm text-slate-400">{role.organization}</p>
+                <div key={idx} className="border-l-2 border-blue-400 pl-4 sm:pl-6 py-4">
+                  <h3 className="font-semibold text-slate-100 text-base sm:text-lg">{role.position}</h3>
+                  <p className="text-xs sm:text-sm text-slate-400">{role.organization}</p>
                   <p className="text-xs text-slate-500 font-mono mt-2">{role.period}</p>
                   <ul className="mt-4 space-y-2">
                     {role.achievements.map((achievement, aidx) => (
-                      <li key={aidx} className="flex gap-3 text-sm text-slate-300">
-                        <span className="text-blue-400">✓</span>
+                      <li key={aidx} className="flex gap-3 text-xs sm:text-sm text-slate-300">
+                        <span className="text-blue-400 flex-shrink-0">✓</span>
                         <span>{achievement}</span>
                       </li>
                     ))}
@@ -455,74 +446,98 @@ const Portfolio = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* EDUCATION */}
-          <section id="education" className="py-24 border-b border-slate-800/50">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Education</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+        {/* EDUCATION */}
+        <section id="education" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Education</h2>
+            
+            {/* Mobile View - Stacked Cards */}
+            <div className="sm:hidden space-y-4">
+              {[
+                { year: '2028', program: 'Dual Degree (B.Tech + M.Tech), Civil Engineering', institution: 'IIT Kharagpur', score: '7.7 CGPA' },
+                { year: '2023', program: 'Class XII, CHSE', institution: 'Adyant Higher Secondary School', score: '85%' },
+                { year: '2021', program: 'Class X, CHSE', institution: 'Saraswati Shishu Vidya Mandir, Unit-8', score: '93.75%' },
+              ].map((edu, idx) => (
+                <div key={idx} className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="font-semibold text-slate-100 text-sm">{edu.year}</h3>
+                    <span className="text-blue-400 font-semibold text-sm">{edu.score}</span>
+                  </div>
+                  <p className="text-xs text-slate-300 mb-2">{edu.program}</p>
+                  <p className="text-xs text-slate-400">{edu.institution}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop View - Table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b border-slate-700/50">
-                    <th className="text-left py-4 px-4 text-slate-300 font-semibold">Year</th>
-                    <th className="text-left py-4 px-4 text-slate-300 font-semibold">Program</th>
-                    <th className="text-left py-4 px-4 text-slate-300 font-semibold">Institution</th>
-                    <th className="text-left py-4 px-4 text-slate-300 font-semibold">Score</th>
+                    <th className="text-left py-3 px-4 text-slate-300 font-semibold">Year</th>
+                    <th className="text-left py-3 px-4 text-slate-300 font-semibold">Program</th>
+                    <th className="text-left py-3 px-4 text-slate-300 font-semibold">Institution</th>
+                    <th className="text-left py-3 px-4 text-slate-300 font-semibold">Score</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
-                    <td className="py-4 px-4 text-slate-400">2028</td>
-                    <td className="py-4 px-4 text-slate-300">Dual Degree (B.Tech + M.Tech), Civil Engineering</td>
-                    <td className="py-4 px-4 text-slate-300">IIT Kharagpur</td>
-                    <td className="py-4 px-4 text-blue-400 font-semibold">7.7 CGPA</td>
+                    <td className="py-3 px-4 text-slate-400">2028</td>
+                    <td className="py-3 px-4 text-slate-300">Dual Degree (B.Tech + M.Tech), Civil Engineering</td>
+                    <td className="py-3 px-4 text-slate-300">IIT Kharagpur</td>
+                    <td className="py-3 px-4 text-blue-400 font-semibold">7.7 CGPA</td>
                   </tr>
                   <tr className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
-                    <td className="py-4 px-4 text-slate-400">2023</td>
-                    <td className="py-4 px-4 text-slate-300">Class XII, CHSE</td>
-                    <td className="py-4 px-4 text-slate-300">Adyant Higher Secondary School</td>
-                    <td className="py-4 px-4 text-blue-400 font-semibold">85%</td>
+                    <td className="py-3 px-4 text-slate-400">2023</td>
+                    <td className="py-3 px-4 text-slate-300">Class XII, CHSE</td>
+                    <td className="py-3 px-4 text-slate-300">Adyant Higher Secondary School</td>
+                    <td className="py-3 px-4 text-blue-400 font-semibold">85%</td>
                   </tr>
                   <tr className="hover:bg-slate-800/20 transition-colors">
-                    <td className="py-4 px-4 text-slate-400">2021</td>
-                    <td className="py-4 px-4 text-slate-300">Class X, CHSE</td>
-                    <td className="py-4 px-4 text-slate-300">Saraswati Shishu Vidya Mandir, Unit-8</td>
-                    <td className="py-4 px-4 text-blue-400 font-semibold">93.75%</td>
+                    <td className="py-3 px-4 text-slate-400">2021</td>
+                    <td className="py-3 px-4 text-slate-300">Class X, CHSE</td>
+                    <td className="py-3 px-4 text-slate-300">Saraswati Shishu Vidya Mandir, Unit-8</td>
+                    <td className="py-3 px-4 text-blue-400 font-semibold">93.75%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* EXTRA-CURRICULAR */}
-          <section id="extracurricular" className="py-24">
-            <h2 className="text-3xl font-bold mb-12 tracking-tight">Extra-Curricular & Academic Excellence</h2>
-            <div className="space-y-8">
+        {/* EXTRA-CURRICULAR */}
+        <section id="extracurricular" className="px-4 sm:px-6 py-12 sm:py-16">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Extra-Curricular & Academic Excellence</h2>
+            <div className="space-y-6 sm:space-y-8">
               {extraCurricular.map((section, idx) => (
                 <div key={idx}>
-                  <h3 className="text-lg font-semibold text-slate-100 mb-4 flex items-center gap-3">
-                    <span className="w-1 h-6 bg-blue-400 rounded-full"></span>
-                    {section.category}
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-100 mb-4 flex items-center gap-3">
+                    <span className="w-1 h-6 bg-blue-400 rounded-full flex-shrink-0"></span>
+                    <span>{section.category}</span>
                   </h3>
                   <ul className="space-y-3 ml-4">
                     {section.items.map((item, iidx) => (
                       <li key={iidx} className="flex gap-3 text-slate-300">
-                        <span className="text-blue-400 text-xs font-bold flex-shrink-0 mt-1.5">•</span>
-                        <span className="text-sm leading-relaxed">{item}</span>
+                        <span className="text-blue-400 text-xs font-bold flex-shrink-0 mt-1">•</span>
+                        <span className="text-xs sm:text-sm leading-relaxed">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               ))}
             </div>
-          </section>
-        </main>
-      </div>
+          </div>
+        </section>
+      </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm py-8 mt-20">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-slate-400">
-          <div className="flex gap-6">
+      <footer className="border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm py-6 sm:py-8 mt-12 sm:mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-4 text-center sm:text-left sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-slate-400">
+          <div className="flex gap-6 justify-center sm:justify-start">
             <a href="mailto:ashutosh@example.com" className="hover:text-slate-200 transition-colors">
               Email
             </a>
