@@ -6,6 +6,16 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [expandedExperience, setExpandedExperience] = useState(null);
 
+  // Handle CV Download
+  const handleDownloadCV = () => {
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Ashutosh_Palai_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const navItems = [
     { id: 'home', label: 'Summary' },
     { id: 'experience', label: 'Experience' },
@@ -205,9 +215,9 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white font-sans">
-      {/* HEADER - MOBILE OPTIMIZED */}
+      {/* HEADER - FIXED DESKTOP GAPS */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+        <div className="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
           <div className="text-lg sm:text-xl font-bold tracking-tight bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent truncate">
             ASHUTOSH PALAI
           </div>
@@ -229,9 +239,12 @@ const Portfolio = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Button - NOW FUNCTIONAL */}
           <div className="flex items-center gap-2 sm:gap-4">
-            <button className="flex items-center gap-1 sm:gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm transition-colors duration-200 whitespace-nowrap">
+            <button
+              onClick={handleDownloadCV}
+              className="flex items-center gap-1 sm:gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded-lg font-semibold text-xs sm:text-sm transition-colors duration-200 whitespace-nowrap"
+            >
               <Download size={14} className="sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Download CV</span>
               <span className="sm:hidden">CV</span>
@@ -267,11 +280,11 @@ const Portfolio = () => {
         )}
       </header>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT - FIXED WIDTH WITH BETTER PADDING */}
       <main className="pt-16 sm:pt-20">
         {/* HERO SECTION */}
-        <section id="home" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+        <section id="home" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
             <div className="space-y-3 sm:space-y-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
                 Ashutosh Palai
@@ -288,7 +301,7 @@ const Portfolio = () => {
               Driving scalable business growth, product strategy, and operational excellence through strategic consulting, venture building, and data-driven decision making.
             </p>
 
-            {/* KEY METRICS - MOBILE OPTIMIZED BENTO GRID */}
+            {/* KEY METRICS */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 sm:pt-8">
               <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm hover:bg-slate-800/60 transition-colors duration-300">
                 <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">40%</div>
@@ -307,8 +320,8 @@ const Portfolio = () => {
         </section>
 
         {/* PROFESSIONAL EXPERIENCE */}
-        <section id="experience" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="experience" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Professional Experience</h2>
             <div className="space-y-3">
               {experiences.map((exp) => (
@@ -350,8 +363,8 @@ const Portfolio = () => {
         </section>
 
         {/* ENTREPRENEURSHIP */}
-        <section id="entrepreneurship" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="entrepreneurship" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Entrepreneurial Ventures</h2>
             <div className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-8 space-y-5 sm:space-y-6">
               <div>
@@ -381,10 +394,10 @@ const Portfolio = () => {
         </section>
 
         {/* STRATEGIC PROJECTS */}
-        <section id="projects" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="projects" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Strategic Projects & Analytics</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {projects.map((project, idx) => (
                 <div key={idx} className="bg-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-8 hover:border-slate-600/50 hover:bg-slate-800/30 transition-all duration-300">
                   <div className="text-xs font-mono text-slate-500 mb-3">{project.date}</div>
@@ -405,10 +418,10 @@ const Portfolio = () => {
         </section>
 
         {/* COMPETITIONS & AWARDS */}
-        <section id="competitions" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="competitions" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Corporate Competitions & Awards</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {awards.map((award, idx) => (
                 <div key={idx} className="bg-gradient-to-br from-blue-900/20 to-slate-800/20 border border-slate-700/50 rounded-lg p-5 sm:p-6 hover:border-blue-600/50 transition-all duration-300">
                   <div className="flex items-start gap-3 mb-3">
@@ -426,8 +439,8 @@ const Portfolio = () => {
         </section>
 
         {/* LEADERSHIP */}
-        <section id="leadership" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="leadership" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Leadership & Positions of Responsibility</h2>
             <div className="space-y-6">
               {leadership.map((role, idx) => (
@@ -450,8 +463,8 @@ const Portfolio = () => {
         </section>
 
         {/* EDUCATION */}
-        <section id="education" className="px-4 sm:px-6 py-12 sm:py-16 border-b border-slate-800/50">
-          <div className="max-w-4xl mx-auto">
+        <section id="education" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-b border-slate-800/50">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Education</h2>
             
             {/* Mobile View - Stacked Cards */}
@@ -509,8 +522,8 @@ const Portfolio = () => {
         </section>
 
         {/* EXTRA-CURRICULAR */}
-        <section id="extracurricular" className="px-4 sm:px-6 py-12 sm:py-16">
-          <div className="max-w-4xl mx-auto">
+        <section id="extracurricular" className="px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 tracking-tight">Extra-Curricular & Academic Excellence</h2>
             <div className="space-y-6 sm:space-y-8">
               {extraCurricular.map((section, idx) => (
@@ -534,14 +547,22 @@ const Portfolio = () => {
         </section>
       </main>
 
-      {/* FOOTER */}
+      {/* FOOTER - CORRECTED CONTACT INFO */}
       <footer className="border-t border-slate-800/50 bg-slate-900/50 backdrop-blur-sm py-6 sm:py-8 mt-12 sm:mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col gap-4 text-center sm:text-left sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-slate-400">
+        <div className="px-4 sm:px-6 lg:px-8 flex flex-col gap-4 text-center sm:text-left sm:flex-row sm:justify-between sm:items-center text-xs sm:text-sm text-slate-400">
           <div className="flex gap-6 justify-center sm:justify-start">
-            <a href="mailto:ashutosh@example.com" className="hover:text-slate-200 transition-colors">
+            <a 
+              href="mailto:ashutoshforcorporate@gmail.com" 
+              className="hover:text-slate-200 transition-colors"
+            >
               Email
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-200 transition-colors">
+            <a 
+              href="https://www.linkedin.com/in/ashutosh-palai-8a47bb285/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-slate-200 transition-colors"
+            >
               LinkedIn
             </a>
           </div>
